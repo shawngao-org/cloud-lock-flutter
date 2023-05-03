@@ -1,0 +1,65 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.shawngao.cloud_lock">
+
+    <!--  接收 WAP 推送消息  -->
+    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
+    <!--  控制设备振动  -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--  接收设备启动完成的广播  -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!--  发布通知  -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!--  访问互联网  -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--  保持设备唤醒状态  -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!--  访问通知策略  -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <!--  发送持久广播  -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <!--  近距离通信  -->
+    <uses-permission android:name="android.permission.NFC"/>
+    <!--  修改系统设置  -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!--  接收 Google 云消息推送  -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <!--  自定义应用程序的 C2DM 接收权限  -->
+    <permission android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"/>
+    <!--  发送 C2DM 消息的权限  -->
+    <uses-permission android:name="android.intent.category.MASTER_CLEAR.permission.C2D_MESSAGE"
+        tools:ignore="ProtectedPermissions" />
+    <application
+        android:label="@string/app_name"
+        android:name="${applicationName}"
+        android:icon="@mipmap/logo_app">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Specifies an Android theme to apply to this Activity as soon as
+                 the Android process has started. This theme is visible to the user
+                 while the Flutter UI initializes. After that, this theme continues
+                 to determine the Window background behind the Flutter UI. -->
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+</manifest>
