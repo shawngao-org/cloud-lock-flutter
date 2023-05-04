@@ -14,6 +14,12 @@ class _ManagementState extends State<Management> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ElevatedButton(onPressed: widget.onPressed, child: Text(widget.value));
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        color: Colors.transparent,
+        child: ElevatedButton(onPressed: widget.onPressed, child: Text(widget.value)),
+      ),
+    );
   }
 }
