@@ -34,7 +34,7 @@
     <application
         android:label="@string/app_name"
         android:name="${applicationName}"
-        android:icon="@mipmap/logo_app">
+        android:icon="@drawable/logo_vector">
         <activity
             android:name=".MainActivity"
             android:exported="true"
