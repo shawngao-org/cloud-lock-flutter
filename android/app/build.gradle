@@ -26,6 +26,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+//    compileSdkVersion 31
+
     signingConfigs {
         release {
             storeFile file('D:\\android-sign-jks\\cloud-lock.jks')
@@ -38,8 +40,11 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+//        applicationId "org.shawngao.cloud_lock"
         sourceCompatibility 16
         targetCompatibility 16
+//        versionCode new Integer(flutterVersionCode)
+//        versionName flutterVersionName
     }
 
     kotlinOptions {

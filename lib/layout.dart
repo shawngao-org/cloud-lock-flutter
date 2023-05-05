@@ -1,13 +1,13 @@
 // import 'package:fancy_bar/fancy_bar.dart';
-import 'dart:io';
 import 'dart:math';
 
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:cloud_lock/home.dart';
 import 'package:cloud_lock/management.dart';
 import 'package:cloud_lock/settings.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -26,8 +26,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const _platformToast =
-  MethodChannel('org.shawngao.channel/toast');
   static const bottomBar1 = <Widget> [Icon(Icons.dashboard, size: 30),
     Icon(Icons.lock, size: 30), Icon(Icons.settings, size: 30),
   ];
@@ -54,7 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() async {
     navStyle = !navStyle;
     setState(() {currentIndex = currentIndex;});
-    _platformToast.invokeMethod('showShortToast', {'message': 'You was clicked me.'});
+    CherryToast(
+        icon:  Icons.alarm_add,
+        themeColor:  Colors.pink,
+        title:  const Text(""),
+        displayTitle:  false,
+        description:  const Text("A bottom cherry toast example"),
+        toastPosition:  Position.bottom,
+        animationType: AnimationType.fromBottom,
+        animationDuration:  const Duration(milliseconds:  1000),
+        autoDismiss:  true
+    ).show(context);
     await _showNotification();
   }
 

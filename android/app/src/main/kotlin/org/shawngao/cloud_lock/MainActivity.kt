@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import org.shawngao.cloud_lock.plugin.ToastProvider
 
 class MainActivity: FlutterActivity() {
 
@@ -35,7 +34,6 @@ class MainActivity: FlutterActivity() {
                 1)
         }
         super.configureFlutterEngine(flutterEngine)
-        ToastProvider.register(this, flutterEngine.dartExecutor.binaryMessenger)
     }
 
     @Deprecated("Deprecated in Java")

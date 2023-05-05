@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'dart:io';
 import 'package:cloud_lock/login.dart';
 import 'package:flutter/material.dart';
@@ -21,22 +19,6 @@ void main() {
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 }
-
-// class NavigationRouter extends StatelessWidget {
-//   const NavigationRouter({
-//     required Key key,
-//     required this.value
-//   }) : super(key: key);
-//   final String value;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     return Scaffold(
-//       body: ,
-//     )
-//   }
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
