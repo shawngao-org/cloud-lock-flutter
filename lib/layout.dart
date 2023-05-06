@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
+import 'package:cloud_lock/db/sqlite.dart';
+import 'package:cloud_lock/db/sqlite/cache.dart';
 import 'package:cloud_lock/home.dart';
 import 'package:cloud_lock/management.dart';
 import 'package:cloud_lock/settings.dart';
@@ -52,18 +54,20 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() async {
     navStyle = !navStyle;
     setState(() {currentIndex = currentIndex;});
-    CherryToast(
-        icon:  Icons.alarm_add,
-        themeColor:  Colors.pink,
-        title:  const Text(""),
-        displayTitle:  false,
-        description:  const Text("A bottom cherry toast example"),
-        toastPosition:  Position.bottom,
-        animationType: AnimationType.fromBottom,
-        animationDuration:  const Duration(milliseconds:  1000),
-        autoDismiss:  true
-    ).show(context);
-    await _showNotification();
+    // CherryToast(
+    //     icon:  Icons.alarm_add,
+    //     themeColor:  Colors.pink,
+    //     title:  const Text(""),
+    //     displayTitle:  false,
+    //     description:  const Text("A bottom cherry toast example"),
+    //     toastPosition:  Position.bottom,
+    //     animationType: AnimationType.fromBottom,
+    //     animationDuration:  const Duration(milliseconds:  1000),
+    //     autoDismiss:  true
+    // ).show(context);
+    // await _showNotification();
+    (await Sqlite.instance.database).rawQuery("DROP TABLE `cache`");
+    (await Sqlite.instance.database).rawQuery(Cache.sql);
   }
 
   late int currentIndex;

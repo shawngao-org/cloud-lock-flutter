@@ -45,6 +45,8 @@ dependencies:
   google_fonts: ^4.0.4
   flutter_login: ^4.1.1
   cherry_toast: ^1.2.1
+  sqflite: ^2.2.8+1
+  path: ^1.8.2
 
 dev_dependencies:
   flutter_test:

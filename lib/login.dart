@@ -1,3 +1,4 @@
+import 'package:cloud_lock/db/sqlite/cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,12 +20,22 @@ class LoginScreen extends StatelessWidget {
 
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
+    return Future.delayed(loginTime).then((_) async {
       if (!users.containsKey(data.name)) {
         return '用户不存在';
       }
       if (users[data.name] != data.password) {
         return '密码不正确';
+      }
+      var cache = Cache();
+      if (await cache.set(data.name, data.password) > 0) {
+        debugPrint('===================');
+        debugPrint(await cache.get(data.name));
+        debugPrint('===================');
+      } else {
+        debugPrint('===================');
+        print('Insert into failed.');
+        debugPrint('===================');
       }
       return null;
     });
