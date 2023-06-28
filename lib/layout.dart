@@ -66,8 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
     //     autoDismiss:  true
     // ).show(context);
     // await _showNotification();
-    (await Sqlite.instance.database).rawQuery("DROP TABLE `cache`");
-    (await Sqlite.instance.database).rawQuery(Cache.sql);
   }
 
   late int currentIndex;
