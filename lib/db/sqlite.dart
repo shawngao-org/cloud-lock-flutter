@@ -1,5 +1,3 @@
-import 'package:cloud_lock/db/sqlite/cache.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -7,11 +5,15 @@ class Sqlite {
   static const _databaseName = "cache.db";
   static const _databaseVersion = 1;
 
-  static const table = 'my_table';
-
-  static const columnId = '_id';
-  static const columnName = 'name';
-  static const columnValue = 'value';
+  static const String tableName = "`cache`";
+  static const String keyField = "`key`";
+  static const String valueField = "`value`";
+  static const String sql = "CREATE TABLE IF NOT EXISTS $tableName ("
+      "  $keyField varchar(64) NOT NULL PRIMARY KEY,"
+      "  $valueField varchar(255) NOT NULL"
+      ")";
+  static const String initHost = "INSERT INTO $tableName ($keyField, $valueField) "
+      "VALUES ('host', 'http://10.4.61.194:8089')";
 
   // make this a singleton class
   Sqlite._privateConstructor();
@@ -35,6 +37,7 @@ class Sqlite {
 
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
-    await db.execute(Cache.sql);
+    await db.execute(sql);
+    await db.execute(initHost);
   }
 }
