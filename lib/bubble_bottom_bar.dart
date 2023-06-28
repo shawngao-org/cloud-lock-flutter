@@ -52,7 +52,7 @@ class BubbleBottomBar extends StatefulWidget {
   final EdgeInsets tilesPadding;
 
   @override
-  _BottomNavigationBarState createState() => _BottomNavigationBarState();
+  State<BubbleBottomBar> createState() => _BottomNavigationBarState();
 }
 
 class _BottomNavigationTile extends StatelessWidget {
