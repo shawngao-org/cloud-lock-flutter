@@ -1,146 +1,233 @@
 import 'package:cloud_lock/db/sqlite/cache.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'layout.dart';
-import 'main.dart';
+import 'package:http/http.dart' as http;
 
-const users = {
-  'shawngao@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
+import 'FadeAnimation.dart';
 
-// "733013771840-ismdoe650p2i4aqvt9pirn8turmbill6.apps.googleusercontent.com"
-// "AIzaSyCjJJ31hL1eEdf1TRV7eTTi1V2D_-zS1Oo"
-
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  Duration get loginTime => const Duration(milliseconds: 2250);
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-  Future<String?> _authUser(LoginData data) {
-    debugPrint('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) async {
-      if (!users.containsKey(data.name)) {
-        return '用户不存在';
-      }
-      if (users[data.name] != data.password) {
-        return '密码不正确';
-      }
-      var cache = Cache();
-      if (await cache.set(data.name, data.password) > 0) {
-        debugPrint('===================');
-        debugPrint(await cache.get(data.name));
-        debugPrint('===================');
-      } else {
-        debugPrint('===================');
-        print('Insert into failed.');
-        debugPrint('===================');
-      }
-      return null;
-    });
+class _LoginScreenState extends State<LoginScreen> {
+  
+  int connState = -1;
+  TextEditingController textEditingController = TextEditingController();
+  
+  Future<String> _serverHost() async {
+    return Cache().get('host');
   }
 
-  Future<String?> _signupUser(SignupData data) {
-    debugPrint('注册名称: ${data.name}, 密码: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      return null;
-    });
-  }
-
-  Future<String> _recoverPassword(String name) {
-    debugPrint('用户名: $name');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return '用户不存在';
-      }
-      return '';
+  _checkConn() async {
+    EasyLoading.show(status: 'Checking server...');
+    Cache().set('host', textEditingController.text).then((value) {
+      http.get(Uri.parse("${textEditingController.text}/ping")).then((http.Response response) {
+        EasyLoading.dismiss();
+        setState(() {
+          connState = 1;
+        });
+      }).onError((Object error, StackTrace stackTrace) {
+        EasyLoading.dismiss();
+        setState(() {
+          connState = 0;
+        });
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FlutterLogin(
-      title: '门禁管理',
-      logo: const AssetImage('assets/images/login-logo.png'),
-      onLogin: _authUser,
-      onSignup: _signupUser,
-      messages: LoginMessages(
-        passwordHint :  '密码',
-        confirmPasswordHint :  '确认密码',
-        forgotPasswordButton :  '忘记了密码?',
-        loginButton :  '登 录',
-        signupButton :  '注册',
-        recoverPasswordButton :  '恢复密码',
-        recoverPasswordIntro :  '在这里重置您的密码',
-        recoverPasswordDescription :
-        '我们会将您的纯文本密码发送到此电子邮件帐户.',
-        recoverCodePasswordDescription :
-        '我们会将密码恢复代码发送到您的电子邮箱.',
-        goBackButton :  '返回',
-        confirmPasswordError :  '密码不匹配!',
-        recoverPasswordSuccess :  '已发送电子邮件',
-        flushbarTitleSuccess :  '成功',
-        flushbarTitleError :  '错误',
-        signUpSuccess :  '已发送激活链接',
-        providersTitleFirst :  '或通过一下方式登录',
-        providersTitleSecond :  '或者',
-        additionalSignUpSubmitButton :  '提交',
-        additionalSignUpFormDescription : '请填写此表格以完成注册',
-        confirmRecoverIntro : '设置新密码的恢复代码已发送到您的电子邮箱.',
-        recoveryCodeHint :  '恢复代码',
-        recoveryCodeValidationError :  '恢复代码为空',
-        setPasswordButton :  '设置密码',
-        confirmRecoverSuccess :  '找回密码.',
-        confirmSignupIntro : '确认码已发送至您的电子邮箱. '
-            '请输入验证码以确认您的帐户.',
-        confirmationCodeHint :  '验证码',
-        confirmationCodeValidationError : '验证码为空',
-        resendCodeButton :  '重新发送验证码',
-        resendCodeSuccess :  '已发送一封新电子邮件.',
-        confirmSignupButton :  '确认',
-        confirmSignupSuccess :  '帐户已确认.',
-      ),
-      loginProviders: <LoginProvider>[
-        LoginProvider(
-          icon: FontAwesomeIcons.google,
-          label: 'Google',
-          callback: () async {
-            debugPrint('start google sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop google sign in');
-            return null;
-          },
+    _serverHost().then((value) => textEditingController.text = value);
+    // TODO: implement build
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 300,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/background.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    left: 30,
+                    width: 80,
+                    height: 200,
+                    child: FadeAnimation(1, Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/light-1.png'),
+                        ),
+                      ),
+                    )),
+                  ),
+                  Positioned(
+                    left: 140,
+                    width: 80,
+                    height: 150,
+                    child: FadeAnimation(1.3, Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/light-2.png')
+                          )
+                      ),
+                    )),
+                  ),
+                  Positioned(
+                    right: 40,
+                    top: 40,
+                    width: 80,
+                    height: 150,
+                    child: FadeAnimation(1.5, Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/clock.png')
+                          )
+                      ),
+                    )),
+                  ),
+                  Positioned(
+                    child: FadeAnimation(1.6, Container(
+                      margin: const EdgeInsets.only(top: 50),
+                      child: const Center(
+                        child: Text("登  录",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
+                    )),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                children: <Widget>[
+                  FadeAnimation(1.8, Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Color.fromRGBO(143, 148, 251, 0.2),
+                              blurRadius: 20.0,
+                              offset: Offset(0, 10)
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color: Colors.grey))
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "电子邮件地址",
+                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              icon: const Icon(FontAwesomeIcons.envelope),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color: Colors.grey))
+                          ),
+                          child: TextField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "密码",
+                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              icon: const Icon(FontAwesomeIcons.key),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: textEditingController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "服务器地址",
+                                hintStyle: TextStyle(color: Colors.grey[400]),
+                                icon: const Icon(FontAwesomeIcons.server),
+                                suffixIcon: connState == -1
+                                    ? const Icon(FontAwesomeIcons.question)
+                                    : connState == 0
+                                    ? const Icon(FontAwesomeIcons.circleXmark, color: Colors.red,)
+                                    : const Icon(FontAwesomeIcons.circleCheck, color: Colors.green,)
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+                  const SizedBox(height: 30,),
+                  FadeAnimation(2, Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: const LinearGradient(
+                            colors: [
+                              Color.fromRGBO(143, 148, 251, 1),
+                              Color.fromRGBO(143, 148, 251, 0.6),
+                            ]
+                        )
+                    ),
+                    child: const Center(
+                      child: Text("登  录", style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                      ),),
+                    ),
+                  )),
+                  const SizedBox(height: 15,),
+                  FadeAnimation(2, SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: _checkConn,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromRGBO(255, 178, 98, 1.0),
+                        ),
+                        child: const Center(
+                          child: Text("检查服务器连通性",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                    ),
+                  )),
+                  const SizedBox(height: 70,),
+                  const FadeAnimation(1.5, Text("忘记了密码 ?",
+                    style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),
+                  ))
+                ],
+              ),
+            )
+          ],
         ),
-        LoginProvider(
-          icon: FontAwesomeIcons.facebookF,
-          label: 'Facebook',
-          callback: () async {
-            debugPrint('start facebook sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop facebook sign in');
-            return null;
-          },
-        ),
-        LoginProvider(
-          icon: FontAwesomeIcons.githubAlt,
-          label: 'Github',
-          callback: () async {
-            debugPrint('start github sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop github sign in');
-            return null;
-          },
-        ),
-      ],
-      onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const MyHomePage(title: appName),
-        ));
-      },
-      onRecoverPassword: _recoverPassword,
-      theme: LoginTheme(
-        primaryColor: const Color(0xff5859f1)
       ),
     );
   }
