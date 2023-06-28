@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_lock/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 const String channelId = "0";
 const String channelName = "org.shawngao.channel/notification";
