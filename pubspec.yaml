@@ -47,6 +47,11 @@ dependencies:
   cherry_toast: ^1.2.1
   sqflite: ^2.2.8+1
   path: ^1.8.2
+  http: ^0.13.6
+  material_dialogs: ^1.1.4
+  simple_animations: ^5.0.2
+  dart_ping: ^8.0.1
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +76,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/login-logo.png
+    - assets/images/background.png
+    - assets/images/light-1.png
+    - assets/images/light-2.png
+    - assets/images/clock.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
