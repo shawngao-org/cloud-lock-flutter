@@ -39,6 +39,51 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  _doLogin() async {
+    EasyLoading.show(status: 'Login ...');
+    if (!checkEmail()) {
+      EasyLoading.dismiss();
+      _emailToast();
+      return;
+    }
+    if (!checkPwd()) {
+      EasyLoading.dismiss();
+      _pwdToast();
+      return;
+    }
+    Rsa().encrypt(pwdEditingController.text, context).then((encoded) {
+      if (encoded.isEmpty) {
+        EasyLoading.dismiss();
+        return;
+      }
+      var map = <String, String>{};
+      map['email'] = emailEditingController.text;
+      map['password'] = encoded;
+      Cache().set('host', textEditingController.text).then((value) {
+        final uri = textEditingController.text + ApiRouter.login;
+        http.post(Uri.parse(uri), body: map).then((value) {
+          EasyLoading.dismiss();
+          if (value.statusCode == 200) {
+            Toast.successToast("登录成功", context);
+            Cache().set('token', (jsonDecode(value.body))['token']).then((value) {
+              Navigator.of(context)
+                  .pushReplacement(
+                  MaterialPageRoute(
+                      builder: (context) => const MyHomePage(title: appName)
+                  )
+              );
+            });
+          } else {
+            Toast.errToast((jsonDecode(value.body))['exception'], context);
+          }
+        }).onError((error, stackTrace) {
+          EasyLoading.dismiss();
+          Toast.errToast(error.toString(), context);
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _serverHost().then((value) => textEditingController.text = value);
